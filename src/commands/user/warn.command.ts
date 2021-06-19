@@ -1,6 +1,8 @@
 import commandType from "../type";
 import permission from "../../utils/permission";
 import fetchUser from "../../utils/fetchUser";
+import getTotalWarn from "../../utils/getTotalWarn";
+import warnUser from "../../utils/warnUser";
 
 const command: commandType = {
     name: "warn",
@@ -32,28 +34,14 @@ const command: commandType = {
             }
 
             const count = Number(args[1]);
-            if (!Number.isInteger(count))
-                return msg.reply("경고 수는 정수여야 합니다.");
+            if (!Number.isInteger(count) || count <= 0)
+                return msg.reply("경고 수는 자연수여야 합니다.");
 
             const reason = args.slice(2).join(", ");
 
-            const db = global.db;
+            await warnUser(userId, count);
 
-            // warn user
-            await db.run(
-                "INSERT INTO warned(user_id, count, reason) VALUES(?, ?, ?)",
-                userId,
-                count,
-                reason
-            );
-
-            // get total count of warn
-            const result = await db.all(
-                "SELECT sum(count) FROM warned WHERE user_id = ?",
-                userId
-            );
-
-            const total = result[0]["sum(count)"];
+            const total = await getTotalWarn(userId);
 
             if (total >= 10) {
                 await msg.guild?.members.ban(user, {
