@@ -1,5 +1,4 @@
 import commandType from "../type";
-import permission from "../../utils/permission";
 import fetchUser from "../../utils/fetchUser";
 import getTotalWarn from "../../utils/getTotalWarn";
 import warnUser from "../../utils/warnUser";
@@ -10,20 +9,10 @@ const command: commandType = {
     guildOnly: true,
     args: true,
     usage: "<경고 해제할 유저 아이디>, <해제할 경고 수>",
+    permission: "BAN_MEMBERS",
     async execute(msg, args) {
         try {
             const userId = args[0];
-
-            if (
-                !(await permission(
-                    msg,
-                    userId,
-                    "BAN_MEMBERS",
-                    "봇에 밴 권한을 추가해 주세요."
-                ))
-            ) {
-                return;
-            }
 
             const user = await fetchUser(msg, userId);
             if (!user) return;

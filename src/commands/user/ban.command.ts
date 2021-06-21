@@ -1,6 +1,5 @@
 import { UserResolvable } from "discord.js";
 import commandType from "../type";
-import permission from "../../utils/permission";
 import fetchUser from "../../utils/fetchUser";
 
 const command: commandType = {
@@ -9,19 +8,10 @@ const command: commandType = {
     args: true,
     usage: "<밴할 유저 id>, <밴 사유>",
     guildOnly: true,
+    permission: "BAN_MEMBERS",
     async execute(msg, args) {
         try {
             const userId = args[0];
-            if (
-                !(await permission(
-                    msg,
-                    userId,
-                    "BAN_MEMBERS",
-                    "봇에 밴 권한을 추가해 주세요."
-                ))
-            ) {
-                return;
-            }
 
             const user = await fetchUser(msg, userId);
             if (!user) return;

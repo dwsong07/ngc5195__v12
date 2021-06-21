@@ -1,5 +1,4 @@
 import commandType from "../type";
-import permission from "../../utils/permission";
 
 const command: commandType = {
     name: "unban",
@@ -7,19 +6,10 @@ const command: commandType = {
     args: true,
     usage: "<밴 해제할 아이디>",
     guildOnly: true,
+    permission: "BAN_MEMBERS",
     async execute(msg, args) {
         try {
             const userId = args[0];
-            if (
-                !(await permission(
-                    msg,
-                    userId,
-                    "BAN_MEMBERS",
-                    "봇에 밴 권한을 추가해 주세요."
-                ))
-            ) {
-                return;
-            }
 
             const banlist = await msg.guild?.fetchBans();
             const banlistId = banlist?.map((item) => item.user.id);

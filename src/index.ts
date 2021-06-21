@@ -1,6 +1,6 @@
 require("dotenv").config({ path: "./.env" });
 
-import Discord from "discord.js";
+import Discord, { NewsChannel, TextChannel } from "discord.js";
 import commands from "./commands";
 import { dbInit } from "./db";
 
@@ -29,6 +29,18 @@ client.on("message", (msg) => {
         // if the command is guild only
         if (command?.guildOnly && msg.channel.type === "dm") {
             return msg.reply("DM에서는 실행할 수 없습니다!");
+        }
+
+        if (command?.permission) {
+            const channel = msg.channel as TextChannel | NewsChannel;
+            const authorPerms = channel.permissionsFor(msg.author);
+            if (!authorPerms || !authorPerms.has(command.permission)) {
+                return msg.reply("권한이 없습니다.");
+            }
+
+            if (!msg.guild?.me?.hasPermission(command.permission)) {
+                return msg.reply("봇에 권한을 추가해 주세요.");
+            }
         }
 
         // if there's no args but args is required.

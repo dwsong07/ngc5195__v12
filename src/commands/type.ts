@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { PermissionResolvable } from "discord.js";
 import { Database } from "sqlite";
 
 export default interface command {
@@ -7,5 +7,6 @@ export default interface command {
     args?: boolean; // is args required
     usage?: string;
     guildOnly?: boolean;
+    permission?: PermissionResolvable;
     execute: (message: Discord.Message, arg: string[]) => void;
 }
