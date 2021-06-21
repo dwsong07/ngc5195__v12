@@ -28,7 +28,7 @@ const command: commandType = {
 
             const reason = args.slice(2).join(", ");
 
-            await warnUser(userId, count);
+            await warnUser(userId, count, reason);
 
             const total = await getTotalWarn(userId);
 
