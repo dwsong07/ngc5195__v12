@@ -8,9 +8,9 @@ function makeEmbedFields(warned: any[]) {
             new Date(item.timestamp + " GMT").toLocaleString("ko-KR", {
                 timeZone: "Asia/Seoul",
             }) + " (KST)",
-        value: `${item.count > 0 ? "경고 수: " : "경고 해제 수: "} ${Math.abs(
-            item.count
-        )}\n사유: ${item.reason || "(없음)"}`,
+        value: `${
+            item.count > 0 ? "**경고** 수: " : "**경고 해제** 수: "
+        } ${Math.abs(item.count)}\n사유: ${item.reason || "(없음)"}`,
     }));
 }
 
@@ -35,7 +35,13 @@ const command: commandType = {
                 userId
             );
 
+            const totalWarn = warned.reduce(
+                (prev, curr) => prev + curr.count,
+                0
+            );
+
             const embed = new MessageEmbed()
+                .setDescription(`**총 경고 수: ${totalWarn}**`)
                 .setTitle(`${user.tag}님의 경고 히스토리`)
                 .addFields(makeEmbedFields(warned));
 
