@@ -11,8 +11,9 @@ export async function dbInit() {
             driver: sqlite3.cached.Database,
         });
         console.log("SQLite Initialized");
-        global.db = db;
+        return db;
     } catch (err) {
         console.error(err);
+        return process.exit(1);
     }
 }

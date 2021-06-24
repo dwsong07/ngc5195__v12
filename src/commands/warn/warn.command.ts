@@ -28,9 +28,9 @@ const command: commandType = {
 
             const reason = args.slice(2).join(", ");
 
-            await warnUser(userId, count, reason);
+            await warnUser(msg.client.db, userId, count, reason);
 
-            const total = await getTotalWarn(userId);
+            const total = await getTotalWarn(msg.client.db, userId);
 
             if (total >= 10) {
                 await msg.guild?.members.ban(user, {

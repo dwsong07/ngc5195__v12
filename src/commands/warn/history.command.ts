@@ -28,7 +28,7 @@ const command: commandType = {
 
             const user = guildMem.user || msg.author;
 
-            const db = global.db;
+            const db = msg.client.db;
 
             const warned = await db.all(
                 "SELECT count, timestamp, reason FROM warned WHERE user_id = ?",

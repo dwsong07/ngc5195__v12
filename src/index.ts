@@ -7,8 +7,9 @@ import { prefix, bot_token, userRoleId } from "../config.json";
 const client = new Discord.Client();
 
 client.once("ready", async () => {
+    client.db = await dbInit();
+    client.commands = commands;
     console.log("Bot Ready");
-    await dbInit();
 });
 
 client.on("message", (msg) => {
@@ -62,6 +63,6 @@ client.on("guildMemberAdd", async (member) => {
 });
 
 // close db when exit
-process.on("exit", () => global.db.close());
+process.on("exit", () => client.db.close());
 
 client.login(bot_token);

@@ -21,14 +21,14 @@ const command: commandType = {
             if (!Number.isInteger(count) || count <= 0)
                 return msg.reply("해제할 경고 수는 자연수이여야 합니다.");
 
-            const beforeTotal = await getTotalWarn(userId); // total warn **before** unwarn
+            const beforeTotal = await getTotalWarn(msg.client.db, userId); // total warn **before** unwarn
 
             // if count > beforeTotal, the afterTotal will be negative
             // to prevent negative total
             //  make count the beforeTotal if count > beforeTotal
             count = Math.min(count, beforeTotal);
 
-            await warnUser(userId, -count);
+            await warnUser(msg.client.db, userId, -count);
             const afterTotal = beforeTotal - count;
 
             msg.channel.send(
