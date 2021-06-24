@@ -1,10 +1,8 @@
-require("dotenv").config({ path: "./.env" });
-
 import Discord, { NewsChannel, TextChannel } from "discord.js";
 import commands from "./commands";
 import { dbInit } from "./db";
 
-import { prefix } from "./config.json";
+import { prefix, bot_token, userRoleId } from "../config.json";
 
 const client = new Discord.Client();
 
@@ -57,7 +55,13 @@ client.on("message", (msg) => {
     }
 });
 
+client.on("guildMemberAdd", async (member) => {
+    if (member.user.bot) return;
+
+    member.roles.set([userRoleId]);
+});
+
 // close db when exit
 process.on("exit", () => global.db.close());
 
-client.login(process.env.BOT_TOKEN);
+client.login(bot_token);

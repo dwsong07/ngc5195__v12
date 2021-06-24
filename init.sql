@@ -11,5 +11,6 @@ CREATE TABLE muted(
     user_id TEXT NOT NULL,
     timestmap TEXT NOT NULL,
     expire_time TEXT,
-    reason TEXT
+    reason TEXT,
+    removed_roles TEXT
 );
