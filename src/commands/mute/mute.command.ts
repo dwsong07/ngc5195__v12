@@ -34,18 +34,15 @@ const command: commandType = {
             expireTime.setMilliseconds(expireTime.getMilliseconds() + ms(time));
             const expireUnixTime = Math.floor(expireTime.getTime() / 1000);
 
-            const reason = args.slice(2).join(", ");
-
             const removeRoles = user.roles.cache
                 .filter((_) => _.id !== mutedRoleId)
                 .map((_) => _.id)
                 .join(" ");
 
             await msg.client.db.run(
-                "INSERT INTO muted(user_id, expire_time, reason, removed_roles, timestamp) VALUES(?, ?, ?, ?, strftime('%s','now'))",
+                "INSERT INTO muted(user_id, expire_time, removed_roles, timestamp) VALUES(?, ?, ?, strftime('%s','now'))",
                 userId,
                 expireUnixTime,
-                reason,
                 removeRoles
             );
 
