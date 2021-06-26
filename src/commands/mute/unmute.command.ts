@@ -6,7 +6,7 @@ const command: commandType = {
     name: "unmute",
     description: "유저를 뮤트 해제합니다.",
     guildOnly: true,
-    usage: "<뮤트할 유저 이름>",
+    usage: "<뮤트할 유저 아이디>",
     args: true,
     async execute(msg, args) {
         try {
@@ -14,8 +14,17 @@ const command: commandType = {
             const user = await fetchUser(msg, userId);
 
             if (!user) return;
+            const removedRoles = await msg.client.db.all(
+                "SELECT removed_roles FROM muted WHERE user_id = ?",
+                userId
+            );
 
-            user.roles.set([userRoleId]);
+            user.roles.set(removedRoles[0].removed_roles.split(" "));
+
+            await msg.client.db.run(
+                "DELETE FROM muted WHERE user_id = ?",
+                userId
+            );
 
             msg.channel.send(`<@${userId}>님을 뮤트 해제했습니다.`);
         } catch (err) {

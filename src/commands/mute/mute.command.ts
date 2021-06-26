@@ -7,7 +7,7 @@ const command: commandType = {
     name: "mute",
     description: "유저를 뮤트합니다.",
     guildOnly: true,
-    usage: "<뮤트할 유저 이름>, <시간>, <사유>",
+    usage: "<뮤트할 유저 아이디>, <시간>, <사유>",
     args: true,
     async execute(msg, args) {
         try {
@@ -21,15 +21,18 @@ const command: commandType = {
 
             const expireTime = new Date();
             expireTime.setMilliseconds(expireTime.getMilliseconds() + ms(time));
+            const expireUnixTime = Math.floor(expireTime.getTime() / 1000);
 
             const reason = args[2];
-            const removeRoles = user.roles.cache.map((_) => _.id).join(" ");
+            const removeRoles = user.roles.cache
+                .filter((_) => _.id !== mutedRoleId)
+                .map((_) => _.id)
+                .join(" ");
 
-            const db = msg.client.db;
-            await db.run(
-                "INSERT INTO muted(user_id, expire_time, reason, removed_roles, timestamp) VALUES(?, ?, ?, ?, datetime('now'))",
+            await msg.client.db.run(
+                "INSERT INTO muted(user_id, expire_time, reason, removed_roles, timestamp) VALUES(?, ?, ?, ?, strftime('%s','now'))",
                 userId,
-                expireTime.toISOString(),
+                expireUnixTime,
                 reason,
                 removeRoles
             );
