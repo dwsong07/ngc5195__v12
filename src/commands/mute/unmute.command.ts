@@ -8,6 +8,7 @@ const command: commandType = {
     guildOnly: true,
     usage: "<뮤트할 유저 아이디>",
     args: true,
+    permission: "MANAGE_ROLES",
     async execute(msg, args) {
         try {
             const userId = args[0];
