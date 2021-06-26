@@ -1,6 +1,7 @@
 import Discord, { NewsChannel, TextChannel } from "discord.js";
 import commands from "./commands";
 import { dbInit } from "./db";
+import muteInterval from "./muteInterval";
 
 import { prefix, bot_token, userRoleId } from "../config.json";
 
@@ -10,6 +11,8 @@ client.once("ready", async () => {
     client.db = await dbInit();
     client.commands = commands;
     console.log("Bot Ready");
+
+    muteInterval(client);
 });
 
 client.on("message", (msg) => {

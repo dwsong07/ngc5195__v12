@@ -1,5 +1,6 @@
 import fetchUser from "../../utils/fetchUser";
 import commandType from "../type";
+import unmute from "../../utils/unmute";
 import { userRoleId } from "../../../config.json";
 
 const command: commandType = {
@@ -20,16 +21,9 @@ const command: commandType = {
                 userId
             );
 
-            if (!removedRoles) {
+            if (!(await unmute(msg.client.db, user))) {
                 return msg.reply("뮤트되어 있지 않습니다.");
             }
-
-            user.roles.set(removedRoles[0].removed_roles.split(" "));
-
-            await msg.client.db.run(
-                "DELETE FROM muted WHERE user_id = ?",
-                userId
-            );
 
             msg.channel.send(`<@${userId}>님을 뮤트 해제했습니다.`);
         } catch (err) {
