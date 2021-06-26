@@ -40,7 +40,13 @@ const command: commandType = {
 
             user.roles.set([mutedRoleId]);
 
-            msg.channel.send(`<@${userId}>님을 뮤트했습니다. (${time}까지)`);
+            const displayTime = expireTime.toLocaleString("ko-KR", {
+                timeZone: "Asia/Seoul",
+            });
+
+            msg.channel.send(
+                `<@${userId}>님을 뮤트했습니다. (${displayTime}까지)`
+            );
         } catch (err) {
             console.error(err);
             msg.reply("에러 났어요!");
