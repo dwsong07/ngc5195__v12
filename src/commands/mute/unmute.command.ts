@@ -13,12 +13,16 @@ const command: commandType = {
         try {
             const userId = args[0];
             const user = await fetchUser(msg, userId);
-
             if (!user) return;
+
             const removedRoles = await msg.client.db.all(
-                "SELECT removed_roles FROM muted WHERE user_id = ?",
+                "SELECT user_id, removed_roles FROM muted WHERE user_id = ?",
                 userId
             );
+
+            if (!removedRoles) {
+                return msg.reply("뮤트되어 있지 않습니다.");
+            }
 
             user.roles.set(removedRoles[0].removed_roles.split(" "));
 

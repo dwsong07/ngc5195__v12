@@ -20,11 +20,22 @@ const command: commandType = {
             const time = args[1];
             if (!time) return msg.reply("시간을 입력해주세요.");
 
+            // check if user id already muted
+            const ids = await msg.client.db.all(
+                "SELECT user_id FROM muted WHERE user_id = ?",
+                userId
+            );
+
+            if (ids.length) {
+                return msg.reply("이미 뮤트되어 있습니다.");
+            }
+
             const expireTime = new Date();
             expireTime.setMilliseconds(expireTime.getMilliseconds() + ms(time));
             const expireUnixTime = Math.floor(expireTime.getTime() / 1000);
 
-            const reason = args[2];
+            const reason = args.slice(2).join(", ");
+
             const removeRoles = user.roles.cache
                 .filter((_) => _.id !== mutedRoleId)
                 .map((_) => _.id)

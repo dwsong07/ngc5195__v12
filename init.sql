@@ -8,7 +8,7 @@ CREATE TABLE warned(
 
 CREATE TABLE muted(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL,
+    user_id TEXT UNIQUE NOT NULL,
     timestamp INTEGER NOT NULL,
     expire_time INTEGER,
     reason TEXT,
