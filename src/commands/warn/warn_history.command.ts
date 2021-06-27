@@ -15,7 +15,7 @@ function makeEmbedFields(warned: any[]) {
 }
 
 const command: commandType = {
-    name: "history",
+    name: "warn_history",
     description: "유저의 경고 히스토리를 봅니다.",
     usage: "<유저 아이디(선택)>",
     guildOnly: true,
