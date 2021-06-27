@@ -23,7 +23,7 @@ const getFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
 
 const commandFiles =
     getFiles(path.resolve(__dirname))?.filter((file) =>
-        file.endsWith(".command.ts")
+        file.match(/\.command\.(ts|js)$/)
     ) || [];
 
 for (const file of commandFiles) {

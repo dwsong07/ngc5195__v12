@@ -25,7 +25,9 @@
     },
     "scripts": {
         "dev": "nodemon --exec ts-node src/index.ts",
-        "clean": "rm -r build",
-        "db_init": "rm -f data.db && sqlite3 data.db < init.sql"
+        "clean": "rm -rf build",
+        "db_dev_init": "rm -f data.db && sqlite3 data.db < init.sql",
+        "build": "tsc",
+        "db_prod_init": "rm -f data.db && sqlite3 build/data.db < init.sql"
     }
 }
