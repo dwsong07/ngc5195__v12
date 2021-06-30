@@ -80,6 +80,13 @@ client.on("guildMemberAdd", async (member) => {
     welcomeChannel.send(`<@${member.id}>님, 환영합니다!`);
 });
 
+client.on("guildMemberRemove", (member) => {
+    const welcomeChannel = client.channels.cache.get(
+        welcomeChannelId
+    ) as TextChannel;
+    welcomeChannel.send(`<@${member.id}>님, 왜 나가셔요;;`);
+});
+
 client.on("messageReactionAdd", (reaction, user) => {
     roleSelect(reaction, user, true);
 });
