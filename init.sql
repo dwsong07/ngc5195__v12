@@ -13,3 +13,10 @@ CREATE TABLE muted(
     expire_time INTEGER,
     removed_roles TEXT
 );
+
+CREATE TABLE role_selector(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    msg_id TEXT NOT NULL,
+    emoji_id TEXT NOT NULL,
+    role_id TEXT NOT NULL
+);

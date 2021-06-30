@@ -2,10 +2,18 @@ import Discord, { NewsChannel, TextChannel } from "discord.js";
 import commands from "./commands";
 import { dbInit } from "./db";
 import muteInterval from "./muteInterval";
+import roleSelect from "./roleSelect";
 
-import { prefix, bot_token, userRoleId } from "../config.json";
+import {
+    prefix,
+    bot_token,
+    userRoleId,
+    welcomeChannelId,
+} from "../config.json";
 
-const client = new Discord.Client();
+const client = new Discord.Client({
+    partials: ["MESSAGE", "CHANNEL", "REACTION"],
+});
 
 client.once("ready", async () => {
     client.db = await dbInit();
@@ -15,8 +23,10 @@ client.once("ready", async () => {
     muteInterval(client);
 });
 
-client.on("message", (msg) => {
+client.on("message", async (msg) => {
     try {
+        if (msg.partial) await msg.fetch();
+
         if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
         const content = msg.content.slice(prefix.length).trim();
@@ -63,6 +73,19 @@ client.on("guildMemberAdd", async (member) => {
     if (member.user.bot) return;
 
     member.roles.set([userRoleId]);
+
+    const welcomeChannel = client.channels.cache.get(
+        welcomeChannelId
+    ) as TextChannel;
+    welcomeChannel.send(`<@${member.id}>님, 환영합니다!`);
+});
+
+client.on("messageReactionAdd", (reaction, user) => {
+    roleSelect(reaction, user, true);
+});
+
+client.on("messageReactionRemove", (reaction, user) => {
+    roleSelect(reaction, user, false);
 });
 
 // close db when exit
