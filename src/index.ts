@@ -3,6 +3,7 @@ import commands from "./commands";
 import { dbInit } from "./db";
 import muteInterval from "./muteInterval";
 import roleSelect from "./roleSelect";
+import messageLog from "./messageLog";
 
 import {
     prefix,
@@ -20,6 +21,7 @@ client.once("ready", async () => {
     client.commands = commands;
     console.log("Bot Ready");
 
+    messageLog(client);
     muteInterval(client);
 });
 

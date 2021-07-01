@@ -3,5 +3,6 @@
     "bot_token": "",
     "userRoleId": "",
     "mutedRoleId": "",
-    "welcomeChannelId": ""
+    "welcomeChannelId": "",
+    "logChannelId": ""
 }
