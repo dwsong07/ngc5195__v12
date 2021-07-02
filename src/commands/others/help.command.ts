@@ -15,7 +15,7 @@ const command: commandType = {
         commands.forEach((command) => {
             data.push(`${prefix} ${command.name}`);
             data.push(`\t${command.description}`);
-            data.push(`\t사용법: ${prefix} ${command.name} ${command.usage}`);
+            data.push(`\t사용법: ${prefix} ${command.name} ${command.usage ?? ""}`);
         });
 
         data.push("```");

@@ -6,7 +6,7 @@ const command: commandType = {
     async execute(msg, args) {
         const sent = await msg.channel.send("Pinging..");
         sent.edit(
-            `Pong! latency: ${sent.createdTimestamp - msg.createdTimestamp}ms`
+            `Pong! 지연시간: ${sent.createdTimestamp - msg.createdTimestamp}ms`
         );
     },
 };
