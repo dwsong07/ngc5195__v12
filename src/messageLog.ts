@@ -18,7 +18,7 @@ export default async function (client: Client) {
     }
 
     client.on("message", (msg) => {
-        if (msg.author.id === client.user?.id) return;
+        if (msg.channel.id === logChannelId) return;
 
         const embed = messageEventEmbed(msg.author).setDescription(
             `<@${msg.author.id}> said \`${msg.content}\` in <#${msg.channel.id}>`
