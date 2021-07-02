@@ -1,7 +1,7 @@
 import commandType from "../type";
 
 const command: commandType = {
-    name: "removeroleselector",
+    name: "rmroleselector",
     description: "roleSelector를 삭제합니다.",
     usage: "<메세지id> <이모지id>",
     args: true,
