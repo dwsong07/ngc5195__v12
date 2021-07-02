@@ -17,6 +17,10 @@ const command: commandType = {
 
             if (!user) return;
 
+            if (msg.author.id === userId) {
+                return msg.reply("자기 자신을 뮤트할 수 없습니다.");
+            }
+
             const time = args[1];
             if (!time) return msg.reply("시간을 입력해주세요.");
 
