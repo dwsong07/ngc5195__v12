@@ -10,7 +10,6 @@ const command: commandType = {
             const table = await msg.client.db.all(
                 "SELECT * FROM role_selector"
             );
-            let output = [];
 
             const embed = new MessageEmbed()
                 .setTitle("roleSelector 리스트")
