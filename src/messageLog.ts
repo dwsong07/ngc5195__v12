@@ -18,6 +18,7 @@ export default async function (client: Client) {
     }
 
     client.on("message", (msg) => {
+        if (msg.channel.type === "dm") return;
         if (msg.channel.id === logChannelId) return;
 
         const embed = messageEventEmbed(msg.author).setDescription(
@@ -28,6 +29,8 @@ export default async function (client: Client) {
     });
 
     client.on("messageDelete", (msg) => {
+        if (msg.channel.type === "dm") return;
+
         const embed = messageEventEmbed(msg.author).setDescription(
             `Someone deleted \`${msg.content}\` sent by <@${msg.author?.id}> in <#${msg.channel.id}>`
         );
@@ -36,6 +39,8 @@ export default async function (client: Client) {
     });
 
     client.on("messageUpdate", (oldMsg, newMsg) => {
+        if (oldMsg.channel.type === "dm") return;
+
         const embed = messageEventEmbed(oldMsg.author).setDescription(
             `Someone edited \`${oldMsg.content}\` to \`${newMsg.content}\` sent by <@${oldMsg.author?.id}> in <#${oldMsg.channel.id}>`
         );
@@ -44,6 +49,8 @@ export default async function (client: Client) {
     });
 
     client.on("messageReactionAdd", async (reaction, user) => {
+        if (reaction.message.channel.type === "dm") return;
+
         try {
             if (user.partial) await user.fetch();
             const { content, author } = reaction.message;
@@ -63,6 +70,8 @@ export default async function (client: Client) {
     });
 
     client.on("messageReactionRemove", async (reaction, user) => {
+        if (reaction.message.channel.type === "dm") return;
+
         try {
             if (user.partial) await user.fetch();
             const { content, author } = reaction.message;
