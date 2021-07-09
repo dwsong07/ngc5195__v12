@@ -4,5 +4,6 @@
     "userRoleId": "",
     "mutedRoleId": "",
     "welcomeChannelId": "",
-    "logChannelId": ""
+    "logChannelId": "",
+    "ownerID": ""
 }
