@@ -30,7 +30,7 @@ const command: commandType = {
                     "result.txt"
                 );
 
-                msg.reply("파일 참고", attachment);
+                msg.channel.send("파일 참고", attachment);
             });
         } catch (err) {
             msg.channel.send(`\`\`\`xl\n${clean(err)}\n\`\`\``);
