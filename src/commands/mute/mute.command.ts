@@ -7,7 +7,7 @@ const command: commandType = {
     name: "mute",
     description: "유저를 뮤트합니다.",
     guildOnly: true,
-    usage: "<뮤트할 유저 아이디>, <시간>, <사유>",
+    usage: "<뮤트할 유저 아이디>, <시간>",
     args: true,
     permission: "MANAGE_ROLES",
     async execute(msg, args) {
