@@ -89,7 +89,7 @@ client.on("guildMemberRemove", (member) => {
     const welcomeChannel = client.channels.cache.get(
         welcomeChannelId
     ) as TextChannel;
-    welcomeChannel.send(`<@${member.id}>님, 왜 나가셔요;;`);
+    welcomeChannel.send(`${member.user?.tag}님, 왜 나가셔요;;`);
 });
 
 client.on("messageReactionAdd", (reaction, user) => {
