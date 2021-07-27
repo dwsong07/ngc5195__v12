@@ -13,15 +13,12 @@ const command: commandType = {
     async execute(msg, args) {
         try {
             const userId = args[0];
+            const serverId = msg.guild?.id ?? "";
+
             const user = await fetchUser(msg, userId);
             if (!user) return;
 
-            const removedRoles = await msg.client.db.all(
-                "SELECT user_id, removed_roles FROM muted WHERE user_id = ?",
-                userId
-            );
-
-            if (!(await unmute(msg.client.db, user))) {
+            if (!(await unmute(msg.client.db, user, serverId))) {
                 return msg.reply("뮤트되어 있지 않습니다.");
             }
 

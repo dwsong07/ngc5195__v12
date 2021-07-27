@@ -13,8 +13,9 @@ const command: commandType = {
     async execute(msg, args) {
         try {
             const userId = args[0];
-            const user = await fetchUser(msg, userId);
+            const serverId = msg.guild?.id ?? "";
 
+            const user = await fetchUser(msg, userId);
             if (!user) return;
 
             if (msg.author.id === userId) {
@@ -26,8 +27,9 @@ const command: commandType = {
 
             // check if user id already muted
             const ids = await msg.client.db.all(
-                "SELECT user_id FROM muted WHERE user_id = ?",
-                userId
+                "SELECT user_id FROM muted WHERE user_id = ? AND server_id = ?",
+                userId,
+                serverId
             );
 
             if (ids.length) {
@@ -38,19 +40,18 @@ const command: commandType = {
             expireTime.setMilliseconds(expireTime.getMilliseconds() + ms(time));
             const expireUnixTime = Math.floor(expireTime.getTime() / 1000);
 
-            const removeRoles = user.roles.cache
-                .filter((_) => _.id !== mutedRoleId)
-                .map((_) => _.id)
-                .join(" ");
-
             await msg.client.db.run(
-                "INSERT INTO muted(user_id, expire_time, removed_roles, timestamp) VALUES(?, ?, ?, strftime('%s','now'))",
+                "INSERT INTO muted(user_id, expire_time, server_id, timestamp) VALUES(?, ?, ?, strftime('%s','now'))",
                 userId,
                 expireUnixTime,
-                removeRoles
+                serverId
             );
 
-            user.roles.set([mutedRoleId]);
+            const mutedRole = msg.guild?.roles.cache.find(
+                (role) => role.name === "Muted"
+            );
+            if (!mutedRole) return msg.reply("Muted 역할이 없어요!");
+            user.roles.add(mutedRole?.id ?? "");
 
             const displayTime = expireTime.toLocaleString("ko-KR", {
                 timeZone: "Asia/Seoul",

@@ -12,7 +12,6 @@ CREATE TABLE muted(
     user_id TEXT UNIQUE NOT NULL,
     timestamp INTEGER NOT NULL,
     expire_time INTEGER,
-    removed_roles TEXT,
     server_id TEXT NOT NULL
 );
 

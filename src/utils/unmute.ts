@@ -4,19 +4,29 @@ import sqlite3 from "sqlite3";
 
 export default async function (
     db: Database<sqlite3.Database, sqlite3.Statement>,
-    user: GuildMember
+    user: GuildMember,
+    serverId: string
 ) {
     try {
-        const removedRoles = await db.all(
-            "SELECT user_id, removed_roles FROM muted WHERE user_id = ?",
-            user.id
+        const mutedUser = await db.all(
+            "SELECT user_id FROM muted WHERE user_id = ? AND server_id = ?",
+            user.id,
+            serverId
         );
+        if (!mutedUser.length) return false;
 
-        if (!removedRoles.length) return false;
+        const mutedRole = user.guild.roles.cache.find(
+            (role) => role.name === "Muted"
+        );
+        if (!mutedRole) return false;
 
-        user.roles.set(removedRoles[0].removed_roles.split(" "));
+        await user.roles.remove(mutedRole.id);
 
-        await db.run("DELETE FROM muted WHERE user_id = ?", user.id);
+        await db.run(
+            "DELETE FROM muted WHERE user_id = ? AND server_id = ?",
+            user.id,
+            serverId
+        );
         return true;
     } catch (err) {
         throw new Error(err);
