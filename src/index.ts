@@ -20,7 +20,7 @@ client.once("ready", async () => {
     client.db = await dbInit();
     client.commands = commands;
 
-    client.user?.setActivity("Nux에서 일하는 중");
+    client.user?.setActivity("어딘가에서 일하는 중");
 
     console.log("Bot Ready");
 
