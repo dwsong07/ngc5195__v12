@@ -2,7 +2,6 @@
     "prefix": "",
     "bot_token": "",
     "userRoleId": "",
-    "mutedRoleId": "",
     "welcomeChannelId": "",
     "logChannelId": "",
     "ownerID": ""

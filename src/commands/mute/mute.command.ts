@@ -1,7 +1,6 @@
 import ms from "ms";
 import fetchUser from "../../utils/fetchUser";
 import commandType from "../type";
-import { mutedRoleId } from "../../../config.json";
 
 const command: commandType = {
     name: "mute",
