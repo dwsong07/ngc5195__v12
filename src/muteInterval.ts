@@ -14,8 +14,12 @@ export default function (client: Client) {
                     Math.floor(new Date().getTime() / 1000) >= item.expire_time
                 ) {
                     const user = await client.guilds?.cache
-                        .array()[0]
-                        .members.fetch(item.user_id);
+                        .get(item.server_id)
+                        ?.members.fetch(item.user_id);
+
+                    if (!user) {
+                        throw Error("Server not found!");
+                    }
 
                     await unmute(client.db, user, item.server_id);
                 }
