@@ -27,10 +27,11 @@ const command: commandType = {
                 return msg.reply("경고 수는 자연수여야 합니다.");
 
             const reason = args.slice(2).join(", ");
+            const serverId = msg.guild?.id ?? "";
 
-            await warnUser(msg.client.db, userId, count, reason);
+            await warnUser(msg.client.db, userId, count, serverId, reason);
 
-            const total = await getTotalWarn(msg.client.db, userId);
+            const total = await getTotalWarn(msg.client.db, userId, serverId);
 
             if (total >= 10) {
                 await msg.guild?.members.ban(user, {

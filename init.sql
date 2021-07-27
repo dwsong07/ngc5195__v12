@@ -3,7 +3,8 @@ CREATE TABLE warned(
     user_id TEXT NOT NULL,
     timestamp TEXT NOT NULL,
     count INTEGER NOT NULL,
-    reason TEXT
+    reason TEXT,
+    server_id TEXT NOT NULL
 );
 
 CREATE TABLE muted(
@@ -11,12 +12,14 @@ CREATE TABLE muted(
     user_id TEXT UNIQUE NOT NULL,
     timestamp INTEGER NOT NULL,
     expire_time INTEGER,
-    removed_roles TEXT
+    removed_roles TEXT,
+    server_id TEXT NOT NULL
 );
 
 CREATE TABLE role_selector(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     msg_id TEXT NOT NULL,
     emoji_id TEXT NOT NULL,
-    role_id TEXT NOT NULL
+    role_id TEXT NOT NULL,
+    server_id TEXT NOT NULL
 );

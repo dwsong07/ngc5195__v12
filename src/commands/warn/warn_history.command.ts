@@ -22,6 +22,7 @@ const command: commandType = {
     async execute(msg, args) {
         try {
             const userId = args[0] || msg.author.id;
+            const serverId = msg.guild?.id;
 
             const guildMem = await fetchUser(msg, userId);
             if (!guildMem) return;
@@ -31,8 +32,9 @@ const command: commandType = {
             const db = msg.client.db;
 
             const warned = await db.all(
-                "SELECT count, timestamp, reason FROM warned WHERE user_id = ?",
-                userId
+                "SELECT count, timestamp, reason FROM warned WHERE user_id = ? AND server_id = ?",
+                userId,
+                serverId
             );
 
             const totalWarn = warned.reduce(
