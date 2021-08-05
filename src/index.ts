@@ -77,7 +77,7 @@ client.on("message", async (msg) => {
 client.on("guildMemberAdd", async (member) => {
     if (member.user.bot) return;
 
-    member.roles.set([userRoleId]);
+    // member.roles.set([userRoleId]);
 
     const welcomeChannel = client.channels.cache.get(
         welcomeChannelId
