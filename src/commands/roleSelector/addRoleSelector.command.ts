@@ -4,13 +4,14 @@ import commandType from "../type";
 const command: commandType = {
     name: "addroleselector",
     description: "roleSelector를 추가합니다.",
-    usage: "<메세지>, <규칙>",
+    usage: "<메세지>, <규칙>, <원타임(true or false)>",
     args: true,
     guildOnly: true,
     permission: "MANAGE_ROLES",
     async execute(msg, args) {
         const targetMsgId = args[0];
         const rules = args[1];
+        const isOneTime = args[2] === "true" ? 1 : 0;
 
         let targetMsg: Message;
 
@@ -46,10 +47,11 @@ const command: commandType = {
                 await targetMsg.react(emojiId);
 
                 await msg.client.db.run(
-                    "INSERT INTO role_selector(msg_id, emoji_id, role_id) VALUES(?, ?, ?)",
+                    "INSERT INTO role_selector(msg_id, emoji_id, role_id, is_one_time) VALUES(?, ?, ?, ?)",
                     targetMsgId,
                     emojiId,
-                    roleId
+                    roleId,
+                    isOneTime
                 );
             }
 

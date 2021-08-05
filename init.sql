@@ -19,5 +19,6 @@ CREATE TABLE role_selector(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     msg_id TEXT NOT NULL,
     emoji_id TEXT NOT NULL,
-    role_id TEXT NOT NULL
+    role_id TEXT NOT NULL,
+    is_one_time NUMBER
 );

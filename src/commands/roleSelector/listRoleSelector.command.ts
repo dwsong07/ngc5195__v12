@@ -14,9 +14,9 @@ const command: commandType = {
             const embed = new MessageEmbed()
                 .setTitle("roleSelector 리스트")
                 .addFields(
-                    table.map(({ msg_id, emoji_id, role_id }) => ({
+                    table.map(({ msg_id, emoji_id, role_id, is_one_time }) => ({
                         name: `${msg_id}, ${emoji_id}`,
-                        value: `<@&${role_id}>`,
+                        value: `<@&${role_id}> ${is_one_time && "(원타임)"}`,
                     }))
                 );
 

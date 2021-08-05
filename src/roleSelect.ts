@@ -28,6 +28,8 @@ export default async function (
         if (add) {
             await guildMember?.roles.add(roleId);
         } else {
+            if (roleFiltered[0].is_one_time === 1) return;
+
             await guildMember?.roles.remove(roleId);
         }
     } catch (err) {
