@@ -2,7 +2,7 @@
     "prefix": "",
     "bot_token": "",
     "userRoleId": "",
-    "welcomeChannelId": "",
-    "logChannelId": "",
+    "welcomeChannelId": { "": "" },
+    "logChannelId": { "": "" },
     "ownerID": ""
 }
