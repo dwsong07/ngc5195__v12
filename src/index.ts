@@ -5,12 +5,7 @@ import muteInterval from "./muteInterval";
 import roleSelect from "./roleSelect";
 import messageLog from "./messageLog";
 
-import {
-    prefix,
-    bot_token,
-    userRoleId,
-    welcomeChannelId,
-} from "../config.json";
+import { prefix, bot_token, welcomeChannelIds } from "../config.json";
 
 const client = new Discord.Client({
     partials: ["MESSAGE", "CHANNEL", "REACTION"],
@@ -79,15 +74,19 @@ client.on("guildMemberAdd", async (member) => {
 
     // member.roles.set([userRoleId]);
 
+    type channelIds = { [key: string]: string };
+
     const welcomeChannel = client.channels.cache.get(
-        welcomeChannelId
+        (welcomeChannelIds as channelIds)[member.guild?.id]
     ) as TextChannel;
     welcomeChannel.send(`<@${member.id}>님, 환영합니다!`);
 });
 
 client.on("guildMemberRemove", (member) => {
+    type channelIds = { [key: string]: string };
+
     const welcomeChannel = client.channels.cache.get(
-        welcomeChannelId
+        (welcomeChannelIds as channelIds)[member.guild?.id]
     ) as TextChannel;
     welcomeChannel.send(`${member.user?.tag}님, 왜 나가셔요;;`);
 });

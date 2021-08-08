@@ -1,14 +1,7 @@
-import { Client, MessageEmbed, TextChannel, User } from "discord.js";
-import { logChannelId } from "../config.json";
+import { Client, Message, MessageEmbed, TextChannel, User } from "discord.js";
+import { logChannelIds } from "../config.json";
 
 export default async function (client: Client) {
-    let logChannel: TextChannel;
-    try {
-        logChannel = (await client.channels.fetch(logChannelId)) as TextChannel;
-    } catch (err) {
-        console.error(err);
-    }
-
     function messageEventEmbed(author: User | null) {
         const embed = new MessageEmbed()
             .setAuthor(author?.tag, author?.avatarURL() || "")
@@ -17,39 +10,55 @@ export default async function (client: Client) {
         return embed;
     }
 
+    function getLogChannel(guildId: string) {
+        type channelIds = { [key: string]: string };
+
+        const logChannel = client.channels.cache.get(
+            (logChannelIds as channelIds)[guildId]
+        ) as TextChannel;
+        return logChannel;
+    }
+
+    const checkInGuild = (msg: Message) =>
+        logChannelIds.hasOwnProperty(msg.guild?.id as string) &&
+        !Object.values(logChannelIds).includes(msg.channel.id);
+
     client.on("message", (msg) => {
         if (msg.channel.type === "dm") return;
-        if (msg.channel.id === logChannelId) return;
+        if (!checkInGuild(msg)) return; // guess blocked in here
 
         const embed = messageEventEmbed(msg.author).setDescription(
             `<@${msg.author.id}> said \`${msg.content}\` in <#${msg.channel.id}>`
         );
 
-        logChannel.send(embed);
+        getLogChannel(msg.guild?.id as string).send(embed);
     });
 
     client.on("messageDelete", (msg) => {
         if (msg.channel.type === "dm") return;
+        if (!checkInGuild(msg as Message)) return;
 
         const embed = messageEventEmbed(msg.author).setDescription(
             `Someone deleted \`${msg.content}\` sent by <@${msg.author?.id}> in <#${msg.channel.id}>`
         );
 
-        logChannel.send(embed);
+        getLogChannel(msg.guild?.id as string).send(embed);
     });
 
     client.on("messageUpdate", (oldMsg, newMsg) => {
         if (oldMsg.channel.type === "dm") return;
+        if (!checkInGuild(oldMsg as Message)) return;
 
         const embed = messageEventEmbed(oldMsg.author).setDescription(
             `Someone edited \`${oldMsg.content}\` to \`${newMsg.content}\` sent by <@${oldMsg.author?.id}> in <#${oldMsg.channel.id}>`
         );
 
-        logChannel.send(embed);
+        getLogChannel(oldMsg.guild?.id as string).send(embed);
     });
 
     client.on("messageReactionAdd", async (reaction, user) => {
         if (reaction.message.channel.type === "dm") return;
+        if (!checkInGuild(reaction.message)) return;
 
         try {
             if (user.partial) await user.fetch();
@@ -63,7 +72,7 @@ export default async function (client: Client) {
                 }>`
             );
 
-            logChannel.send(embed);
+            getLogChannel(reaction.message.guild?.id as string).send(embed);
         } catch (err) {
             console.error(err);
         }
@@ -71,6 +80,7 @@ export default async function (client: Client) {
 
     client.on("messageReactionRemove", async (reaction, user) => {
         if (reaction.message.channel.type === "dm") return;
+        if (!checkInGuild(reaction.message)) return;
 
         try {
             if (user.partial) await user.fetch();
@@ -84,7 +94,7 @@ export default async function (client: Client) {
                 }>`
             );
 
-            logChannel.send(embed);
+            getLogChannel(reaction.message.guild?.id as string).send(embed);
         } catch (err) {
             console.error(err);
         }
